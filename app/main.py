@@ -13,6 +13,8 @@ from app.database.seed import seed_challenges, seed_admin
 
 # Import routers
 from app.routers import auth, challenges, interviews, ai, analytics, admin
+from app.compiler import router as compiler_router
+import app.models  # noqa: F401 - ensure all SQLAlchemy models are registered
 
 
 @asynccontextmanager
@@ -63,6 +65,7 @@ app.include_router(interviews.router, prefix="/api")
 app.include_router(ai.router, prefix="/api")
 app.include_router(analytics.router, prefix="/api")
 app.include_router(admin.router, prefix="/api")
+app.include_router(compiler_router.router, prefix="/api")
 
 
 @app.get("/")
@@ -80,3 +83,4 @@ def root():
 def health():
     """Health check for Render."""
     return {"status": "healthy"}
+
