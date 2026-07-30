@@ -3,7 +3,6 @@ Application configuration loaded from environment variables.
 """
 
 from pydantic_settings import BaseSettings
-from typing import List
 import os
 
 
@@ -34,7 +33,7 @@ class Settings(BaseSettings):
     CORS_ORIGINS: str = "http://localhost:3000"
 
     @property
-    def cors_origins_list(self) -> List[str]:
+    def cors_origins_list(self) -> list[str]:
         """Parse CORS_ORIGINS string into a list."""
         return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
 

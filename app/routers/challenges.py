@@ -4,7 +4,6 @@ Challenges router: CRUD operations for system design challenges.
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
-from typing import Optional
 from app.database.connection import get_db
 from app.core.dependencies import get_current_user, get_admin_user
 from app.models.user import User
@@ -18,9 +17,9 @@ router = APIRouter(prefix="/challenges", tags=["Challenges"])
 
 @router.get("", response_model=ChallengeListResponse)
 def list_challenges(
-    difficulty: Optional[str] = Query(None, description="Filter by difficulty"),
-    category: Optional[str] = Query(None, description="Filter by category"),
-    search: Optional[str] = Query(None, description="Search in title/description"),
+    difficulty: str | None = Query(None, description="Filter by difficulty"),
+    category: str | None = Query(None, description="Filter by category"),
+    search: str | None = Query(None, description="Search in title/description"),
     skip: int = Query(0, ge=0),
     limit: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db),

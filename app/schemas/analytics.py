@@ -3,7 +3,6 @@ Analytics schemas for dashboard and progress data.
 """
 
 from pydantic import BaseModel
-from typing import List, Optional
 
 
 class DashboardStats(BaseModel):
@@ -24,7 +23,7 @@ class RecentInterview(BaseModel):
     challenge_title: str
     difficulty: str
     overall_score: float
-    completed_at: Optional[str] = None
+    completed_at: str | None = None
 
 
 class WeeklyActivity(BaseModel):
@@ -34,15 +33,15 @@ class WeeklyActivity(BaseModel):
 
 class DashboardResponse(BaseModel):
     stats: DashboardStats
-    skill_scores: List[SkillScore] = []
-    recent_interviews: List[RecentInterview] = []
-    weekly_activity: List[WeeklyActivity] = []
-    score_history: List[dict] = []
+    skill_scores: list[SkillScore] = []
+    recent_interviews: list[RecentInterview] = []
+    weekly_activity: list[WeeklyActivity] = []
+    score_history: list[dict] = []
 
 
 class ProgressResponse(BaseModel):
-    score_trend: List[dict] = []
-    category_progress: List[dict] = []
+    score_trend: list[dict] = []
+    category_progress: list[dict] = []
     improvement_rate: float = 0.0
     strongest_area: str = ""
     weakest_area: str = ""
@@ -57,5 +56,5 @@ class LeaderboardEntry(BaseModel):
 
 
 class LeaderboardResponse(BaseModel):
-    entries: List[LeaderboardEntry] = []
-    user_rank: Optional[int] = None
+    entries: list[LeaderboardEntry] = []
+    user_rank: int | None = None

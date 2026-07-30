@@ -5,7 +5,6 @@ Falls back to mock responses when API key is not configured.
 
 import json
 import random
-from typing import Optional
 from app.core.config import settings
 from loguru import logger
 

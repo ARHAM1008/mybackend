@@ -3,7 +3,6 @@ Challenge schemas for request/response validation.
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional, List
 from datetime import datetime
 
 
@@ -19,24 +18,24 @@ class ChallengeCreate(BaseModel):
     expected_scale: str = ""
     constraints: str = ""
     estimated_time: int = 45
-    tags: List[str] = []
+    tags: list[str] = []
     icon: str = "server"
 
 
 class ChallengeUpdate(BaseModel):
-    title: Optional[str] = None
-    difficulty: Optional[str] = None
-    category: Optional[str] = None
-    description: Optional[str] = None
-    requirements: Optional[str] = None
-    functional_requirements: Optional[str] = None
-    non_functional_requirements: Optional[str] = None
-    expected_scale: Optional[str] = None
-    constraints: Optional[str] = None
-    estimated_time: Optional[int] = None
-    tags: Optional[List[str]] = None
-    icon: Optional[str] = None
-    is_active: Optional[int] = None
+    title: str | None = None
+    difficulty: str | None = None
+    category: str | None = None
+    description: str | None = None
+    requirements: str | None = None
+    functional_requirements: str | None = None
+    non_functional_requirements: str | None = None
+    expected_scale: str | None = None
+    constraints: str | None = None
+    estimated_time: int | None = None
+    tags: list[str] | None = None
+    icon: str | None = None
+    is_active: int | None = None
 
 
 class ChallengeResponse(BaseModel):
@@ -61,5 +60,5 @@ class ChallengeResponse(BaseModel):
 
 
 class ChallengeListResponse(BaseModel):
-    challenges: List[ChallengeResponse]
+    challenges: list[ChallengeResponse]
     total: int

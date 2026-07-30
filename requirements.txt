@@ -1,25 +1,20 @@
 # FastAPI & Server
-fastapi==0.115.0
-uvicorn[standard]==0.30.6
-python-multipart==0.0.9
+fastapi==0.115.12
+uvicorn[standard]==0.34.3
+python-multipart==0.0.20
 
 # Database
-sqlalchemy==2.0.35
-alembic==1.13.2
-# 2.9.10 supplies a pre-built Windows wheel for Python 3.13.
-psycopg2-binary==2.9.10
+sqlalchemy==2.0.41
+alembic==1.16.1
+psycopg[binary]==3.2.6
 
 # Authentication
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
-bcrypt==4.1.3
 
 # Validation & Settings
-# Using pydantic 2.9.2 to avoid pydantic-core Rust compilation issues on Render
-# pydantic-core 2.23.4 has pre-built wheels for all platforms
-pydantic[email-validator]==2.9.2
-pydantic-core==2.23.4
-pydantic-settings==2.6.1
+pydantic==2.11.7
+pydantic-settings==2.8.1
 email-validator==2.2.0
 
 # AI
@@ -30,7 +25,7 @@ slowapi==0.1.9
 
 # Utilities
 python-dotenv==1.0.1
-loguru==0.7.2
+loguru==0.7.3
 
 # CORS
 starlette==0.38.6

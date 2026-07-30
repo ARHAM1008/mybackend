@@ -3,7 +3,6 @@ Interview schemas for request/response validation.
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional, List
 from datetime import datetime
 
 
@@ -66,14 +65,14 @@ class InterviewDetailResponse(BaseModel):
     challenge_difficulty: str = ""
     status: str
     started_at: datetime
-    completed_at: Optional[datetime] = None
-    answer: Optional[dict] = None
-    score: Optional[ScoreResponse] = None
-    feedback: Optional[FeedbackResponse] = None
+    completed_at: datetime | None = None
+    answer: dict | None = None
+    score: ScoreResponse | None = None
+    feedback: FeedbackResponse | None = None
 
     model_config = {"from_attributes": True}
 
 
 class InterviewHistoryResponse(BaseModel):
-    interviews: List[InterviewDetailResponse]
+    interviews: list[InterviewDetailResponse]
     total: int

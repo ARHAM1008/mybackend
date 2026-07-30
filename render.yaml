@@ -4,7 +4,8 @@ services:
     runtime: python
     region: oregon
     plan: free
-    buildCommand: export CARGO_HOME=/tmp/cargo && mkdir -p /tmp/cargo && pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
+    pythonVersion: 3.12.9
+    buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: DATABASE_URL
@@ -27,5 +28,3 @@ services:
         value: production
       - key: APP_NAME
         value: CodeMentor
-      - key: PYTHON_VERSION
-        value: 3.11.0
