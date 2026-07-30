@@ -4,9 +4,12 @@ services:
     runtime: python
     region: oregon
     plan: free
+
     pythonVersion: 3.12.9
+
     buildCommand: pip install --upgrade pip setuptools wheel && pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
     envVars:
       - key: DATABASE_URL
         sync: false
@@ -15,7 +18,7 @@ services:
       - key: JWT_ALGORITHM
         value: HS256
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
-        value: 1440
+        value: "1440"
       - key: OPENAI_API_KEY
         sync: false
       - key: OPENAI_MODEL
