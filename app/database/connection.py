@@ -8,6 +8,13 @@ from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from app.core.config import settings
 
 
+def _build_database_url(url: str) -> str:
+    """Ensure postgres URLs use the installed psycopg v3 driver."""
+    if url.startswith("postgresql://") and "+" not in url.split("://", 1)[0]:
+        return url.replace("postgresql://", "postgresql+psycopg://", 1)
+    return url
+
+
 # Configure engine based on database type
 if settings.is_sqlite:
     engine = create_engine(
@@ -17,7 +24,7 @@ if settings.is_sqlite:
     )
 else:
     engine = create_engine(
-        settings.DATABASE_URL,
+        _build_database_url(settings.DATABASE_URL),
         pool_size=10,
         max_overflow=20,
         pool_pre_ping=True,
