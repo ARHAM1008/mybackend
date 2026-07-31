@@ -28,38 +28,30 @@ class RefreshRequest(BaseModel):
 @router.post("/register", response_model=TokenResponse, status_code=status.HTTP_201_CREATED)
 def register(data: RegisterRequest, db: Session = Depends(get_db)):
     """Register a new user account."""
-    try:
-        existing = db.query(User).filter(User.email == data.email).first()
-        if existing:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Email already registered",
-            )
-        user = User(
-            name=data.name,
-            email=data.email,
-            password_hash=hash_password(data.password),
-            role="user",
-        )
-        db.add(user)
-        db.commit()
-        db.refresh(user)
-
-        token = create_access_token(data={"sub": str(user.id), "role": user.role})
-        refresh = create_refresh_token(data={"sub": str(user.id), "role": user.role})
-
-        return TokenResponse(
-            access_token=token,
-            refresh_token=refresh,
-            user=UserResponse.model_validate(user),
-        )
-    except HTTPException:
-        raise
-    except Exception as e:
+    existing = db.query(User).filter(User.email == data.email).first()
+    if existing:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Registration failed: {str(e)}",
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email already registered",
         )
+    user = User(
+        name=data.name,
+        email=data.email,
+        password_hash=hash_password(data.password),
+        role="user",
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+
+    token = create_access_token(data={"sub": str(user.id), "role": user.role})
+    refresh = create_refresh_token(data={"sub": str(user.id), "role": user.role})
+
+    return TokenResponse(
+        access_token=token,
+        refresh_token=refresh,
+        user=UserResponse.model_validate(user),
+    )
 
 
 @router.post("/login", response_model=TokenResponse)
