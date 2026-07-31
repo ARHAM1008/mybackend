@@ -26,3 +26,6 @@ class User(Base):
     interview_sessions = relationship("InterviewSession", back_populates="user", cascade="all, delete-orphan")
     compiler_submissions = relationship("CompilerSubmission", back_populates="user", cascade="all, delete-orphan")
     saved_codes = relationship("SavedCode", back_populates="user", cascade="all, delete-orphan")
+    conversations = relationship("Conversation", back_populates="user", cascade="all, delete-orphan")
+
+

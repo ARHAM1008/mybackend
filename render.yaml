@@ -19,10 +19,10 @@ services:
         value: HS256
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: "1440"
-      - key: OPENAI_API_KEY
+      - key: GROQ_API_KEY
         sync: false
-      - key: OPENAI_MODEL
-        value: gpt-4o-mini
+      - key: GROQ_MODEL
+        value: llama-3.3-70b-versatile
       - key: FRONTEND_URL
         sync: false
       - key: CORS_ORIGINS
@@ -31,3 +31,5 @@ services:
         value: production
       - key: APP_NAME
         value: CodeMentor
+      - key: CHAT_RATE_LIMIT_PER_MINUTE
+        value: "30"

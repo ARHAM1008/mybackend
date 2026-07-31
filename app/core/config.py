@@ -3,7 +3,6 @@ Application configuration loaded from environment variables.
 """
 
 from pydantic_settings import BaseSettings
-import os
 
 
 class Settings(BaseSettings):
@@ -21,21 +20,32 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440  # 24 hours
 
-    # OpenAI
-    OPENAI_API_KEY: str = ""
-    OPENAI_MODEL: str = "gpt-4o-mini"
+    # Groq AI (sole AI provider)
+    GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
+    # Backward-compatible alias used by older env files
+    GROQ_DEFAULT_MODEL: str = ""
 
     # Compiler
     COMPILER_PROVIDER: str = "local"
+    PISTON_API_URL: str = "https://emkc.org/api/v2/piston"
 
     # CORS
     FRONTEND_URL: str = "http://localhost:3000"
     CORS_ORIGINS: str = "http://localhost:3000"
 
+    # Rate limiting
+    CHAT_RATE_LIMIT_PER_MINUTE: int = 30
+
+    @property
+    def groq_model(self) -> str:
+        """Resolved default Groq model (GROQ_MODEL preferred)."""
+        return (self.GROQ_MODEL or self.GROQ_DEFAULT_MODEL or "llama-3.3-70b-versatile").strip()
+
     @property
     def cors_origins_list(self) -> list[str]:
         """Parse CORS_ORIGINS string into a list."""
-        return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
+        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
 
     @property
     def is_production(self) -> bool:
@@ -49,6 +59,7 @@ class Settings(BaseSettings):
         "env_file": ".env",
         "env_file_encoding": "utf-8",
         "case_sensitive": True,
+        "extra": "ignore",
     }
 
 

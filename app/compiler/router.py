@@ -23,10 +23,10 @@ from app.compiler.schemas import (
     SubmissionListResponse,
 )
 from app.compiler.service import CompilerService
-from app.core.config import settings
 from app.core.dependencies import get_current_user
 from app.database.connection import get_db
 from app.models.user import User
+
 
 router = APIRouter(prefix="/compiler", tags=["Compiler"])
 compiler_service = CompilerService()
@@ -202,25 +202,31 @@ async def compiler_ai(
         "comments": "Generate helpful comments for this code without over-commenting.",
         "complexity": "Analyze the time and space complexity of this code.",
     }
-    fallback = f"### {payload.action.title()}\n\nAI is ready to analyze this {payload.language} code. Configure OPENAI_API_KEY to receive live model feedback."
+    fallback = (
+        f"### {payload.action.title()}\n\n"
+        f"AI is ready to analyze this {payload.language} code. "
+        "Configure GROQ_API_KEY to receive live model feedback."
+    )
 
-    if not settings.OPENAI_API_KEY or settings.OPENAI_API_KEY == "your-openai-api-key":
+    from app.services.groq_service import GroqServiceError, chat_completion, is_groq_configured
+
+    if not is_groq_configured():
         return AiCompilerResponse(result=fallback)
 
     try:
-        from openai import AsyncOpenAI
-
-        client = AsyncOpenAI(api_key=settings.OPENAI_API_KEY)
-        response = await client.chat.completions.create(
-            model=settings.OPENAI_MODEL,
-            messages=[
-                {"role": "system", "content": "You are CodeMentor's coding coach. Respond in concise markdown."},
-                {"role": "user", "content": f"{prompts[payload.action]}\n\nLanguage: {payload.language}\n\n```{payload.language}\n{payload.code}\n```"},
-            ],
+        result = await chat_completion(
+            message=(
+                f"{prompts[payload.action]}\n\nLanguage: {payload.language}\n\n"
+                f"```{payload.language}\n{payload.code}\n```"
+            ),
+            system_prompt="You are CodeMentor's coding coach. Respond in concise markdown.",
             temperature=0.4,
             max_tokens=1200,
         )
-        return AiCompilerResponse(result=response.choices[0].message.content or fallback)
+        return AiCompilerResponse(result=result or fallback)
+    except GroqServiceError as exc:
+        return AiCompilerResponse(result=f"{fallback}\n\n_{exc.user_message}_")
     except Exception:
         return AiCompilerResponse(result=fallback)
+
 
