@@ -24,9 +24,9 @@ services:
       - key: GROQ_MODEL
         value: llama-3.3-70b-versatile
       - key: FRONTEND_URL
-        value: https://myfrontend-2.vercel.app
+        value: https://pro-frontend-wine.vercel.app
       - key: CORS_ORIGINS
-        value: http://localhost:3000,https://myfrontend-2.vercel.app
+        value: http://localhost:3000,https://pro-frontend-wine.vercel.app
       - key: ENVIRONMENT
         value: production
       - key: APP_NAME
